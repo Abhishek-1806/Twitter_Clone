@@ -53,7 +53,7 @@ export const deletePost = async (req, res) => {
 
         if(post.img){
             const imgId = post.img.split("/").pop().split(".")[0];
-            await cloudinary.uploader.destroy(userId);
+            await cloudinary.uploader.destroy(imgId);
         }
 
         await Post.findByIdAndDelete(req.params.id);
@@ -110,7 +110,9 @@ export const likeUnlikePost = async (req, res) => {
             // unlike post
             await Post.updateOne({_id:postId}, {$pull: {likes: userId}});
             await User.updateOne({_id: userId}, {$pull: {likedPosts: postId}});
-            res.status(200).json({message: "Post unliked successfully"});
+
+            const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
+            res.status(200).json(updatedLikes);
         }else{
             // like post
             post.likes.push(userId);
@@ -125,11 +127,11 @@ export const likeUnlikePost = async (req, res) => {
 
             await notification.save();
 
-            res.status(200).json({message: "Post liked successfully"});
+            const updatedLikes = post.likes;
+            res.status(200).json(updatedLikes);
         }
-
     } catch (error) {
-        console.log("Error in likeUnlikePost: ", error.message);
+        console.log("Error in likeUnlikePost: ", error);
         res.status(500).json({error: "Internal Server Error"});
     }
 };
