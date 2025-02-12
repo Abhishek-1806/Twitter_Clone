@@ -17,5 +17,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    minify: 'esbuild', // Ensure Minification
+    cssCodeSplit: false, // Ensure all CSS is combined into one file
   },
 });
