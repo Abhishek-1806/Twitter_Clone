@@ -214,7 +214,7 @@ const ProfilePage = () => {
 													rel='noreferrer'
 													className='text-sm text-blue-500 hover:underline'
 												>
-												user?.link
+												{user?.link}
 												</a>
 											</>
 										</div>
